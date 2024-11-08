@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { Input } from "../components/ui/input";
 import {
@@ -6,6 +6,8 @@ import {
   SelectTravelerOptions,
 } from "@/constants/options";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { checkMissingFields } from "@/utils/function";
 
 type Option = {
   label: string;
@@ -20,6 +22,7 @@ type FormData = {
 };
 
 function CreateTrip() {
+  const { toast } = useToast();
   const [place, setPlace] = useState<Option | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
@@ -36,9 +39,25 @@ function CreateTrip() {
     });
   };
 
-  useEffect(() => {
+  const OnGenerateTrip = () => {
+    const { budget, location, traveler, days } = formData;
+
+    if (
+      !budget ||
+      !(location.label && location.value) ||
+      !traveler ||
+      days <= 0 ||
+      days > 5
+    ) {
+      toast({
+        title: "Error!",
+        description: checkMissingFields(location, days, budget, traveler),
+      });
+      return;
+    }
+
     console.log(formData);
-  }, [formData]);
+  };
 
   return (
     <>
@@ -126,7 +145,7 @@ function CreateTrip() {
           </div>
 
           <div className="my-10 flex justify-end">
-            <Button>Generate Trip</Button>
+            <Button onClick={OnGenerateTrip}>Generate Trip</Button>
           </div>
         </div>
       </div>
