@@ -2,12 +2,14 @@ import { useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { Input } from "../components/ui/input";
 import {
+  AI_PROMPT,
   SelectBudgetOptions,
   SelectTravelerOptions,
 } from "@/constants/options";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { checkMissingFields } from "@/utils/function";
+import { chatSession } from "@/service/AIModal";
 
 type Option = {
   label: string;
@@ -39,7 +41,7 @@ function CreateTrip() {
     });
   };
 
-  const OnGenerateTrip = () => {
+  const OnGenerateTrip = async () => {
     const { budget, location, traveler, days } = formData;
 
     if (
@@ -56,7 +58,11 @@ function CreateTrip() {
       return;
     }
 
-    console.log(formData);
+    const FINAL_PROMPT = AI_PROMPT(location.label, days, budget, traveler);
+
+    const result = await chatSession.sendMessage(FINAL_PROMPT);
+
+    console.log(result?.response?.text());
   };
 
   return (

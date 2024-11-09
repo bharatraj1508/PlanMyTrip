@@ -25,7 +25,7 @@ export const SelectTravelerOptions = [
     title: "Only me",
     desc: "A sole traveler in exploration",
     icon: "🧍‍♂️",
-    people: "1",
+    people: "1 person",
   },
   {
     id: 2,
@@ -49,3 +49,13 @@ export const SelectTravelerOptions = [
     people: "5 to 10 people",
   },
 ];
+
+export const AI_PROMPT = (
+  location: string,
+  days: number,
+  budget: string,
+  traveler: string
+) => {
+  const prompt = `Generate Travel Plan for Location: ${location}, for ${days} days for ${traveler} with a ${budget} budget, give me Hotels options list with HotelName, Hotel address, Price, hotel image url, geo cordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo cordimates, ticket pricing, Time travel each of the location for ${days} days with each day plan with best time to visit in JSON format`;
+  return prompt;
+};
