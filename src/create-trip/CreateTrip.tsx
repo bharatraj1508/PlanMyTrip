@@ -10,6 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { checkMissingFields } from "@/utils/function";
 import { chatSession } from "@/service/AIModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import logo from "../../public/logo.svg";
+import { GrGoogle } from "react-icons/gr";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 type Option = {
   label: string;
@@ -26,6 +38,7 @@ type FormData = {
 function CreateTrip() {
   const { toast } = useToast();
   const [place, setPlace] = useState<Option | null>(null);
+  const [openSignInDialog, setOpenSignInDialog] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<FormData>({
     location: { label: "", value: "" },
@@ -41,8 +54,20 @@ function CreateTrip() {
     });
   };
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => getUserProfile(codeResponse?.access_token),
+    onError: (error) => console.log(error),
+  });
+
   const OnGenerateTrip = async () => {
     const { budget, location, traveler, days } = formData;
+
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      setOpenSignInDialog(true);
+      return;
+    }
 
     if (
       !budget ||
@@ -62,7 +87,28 @@ function CreateTrip() {
 
     const result = await chatSession.sendMessage(FINAL_PROMPT);
 
+    console.log(FINAL_PROMPT);
+
     console.log(result?.response?.text());
+  };
+
+  const getUserProfile = (token: string) => {
+    axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "Application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        setOpenSignInDialog(false);
+        OnGenerateTrip();
+      });
   };
 
   return (
@@ -153,6 +199,27 @@ function CreateTrip() {
           <div className="my-10 flex justify-end">
             <Button onClick={OnGenerateTrip}>Generate Trip</Button>
           </div>
+
+          <Dialog open={openSignInDialog}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex gap-5 items-center">
+                  <img className="h-10 w-10" src={logo} alt="app-logo" />
+                  Sign In with Google
+                </DialogTitle>
+                <DialogDescription>
+                  Please sing in to the app using your google account.
+                  <Button
+                    onClick={() => login()}
+                    className=" w-full mt-5 bg-blue-600 hover:bg-blue-800 rounded-lg flex items-center gap-4"
+                  >
+                    <GrGoogle />
+                    Sign in with google
+                  </Button>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </>
