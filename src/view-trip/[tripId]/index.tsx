@@ -1,11 +1,14 @@
 import { toast } from "@/hooks/use-toast";
 import { db } from "@/service/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import InfoSection from "../components/InfoSection";
+import { Trip } from "@/interfaces/Trip";
 
 function ViewTrip() {
   const { tripId } = useParams();
+  const [trip, setTrip] = useState<Trip>();
 
   useEffect(() => {
     tripId && getTripData();
@@ -16,7 +19,8 @@ function ViewTrip() {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      setTrip(docSnap.data() as Trip);
+      console.log(docSnap.data());
     } else {
       toast({
         title: "OOPS!",
@@ -27,11 +31,11 @@ function ViewTrip() {
 
   return (
     <>
-      {/* Infomration Section */}
+      <div className="px-5 md:px-44 lg:px-56 mt-10 mb-10">
+        <InfoSection tripSelection={trip?.tripSelection} />
 
-      {/* Hotel Details */}
-
-      {/* Daily plan */}
+        {/* Daily plan */}
+      </div>
     </>
   );
 }
