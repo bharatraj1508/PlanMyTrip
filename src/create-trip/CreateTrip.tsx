@@ -24,6 +24,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 type Option = {
   label: string;
@@ -42,6 +43,7 @@ function CreateTrip() {
   const [place, setPlace] = useState<Option | null>(null);
   const [openSignInDialog, setOpenSignInDialog] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
     location: { label: "", value: "" },
@@ -108,6 +110,7 @@ function CreateTrip() {
       tripSelection: formData,
     });
     setLoading(false);
+    navigate("/view-trip/" + docId);
   };
 
   const getUserProfile = (token: string) => {
