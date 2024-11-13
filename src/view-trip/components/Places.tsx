@@ -5,8 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import tripImg from "../../assets/trip.jpg";
-import { Link } from "react-router-dom";
 import ScheduleCard from "./ScheduleCard";
 
 type ItineraryProps = {
