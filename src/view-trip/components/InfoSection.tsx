@@ -1,20 +1,35 @@
-import tripImg from "../../assets/trip.jpg";
 import { FaDollarSign } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io";
 import { FaUserFriends } from "react-icons/fa";
 import { TripSelection } from "@/interfaces/TripSelection";
+import { GetPhotoUrl } from "@/service/PhotosAPI";
+import { useEffect, useState } from "react";
 
 type TripDataProps = {
   tripSelection?: TripSelection;
 };
 
 function InfoSection({ tripSelection }: TripDataProps) {
+  useEffect(() => {
+    if (tripSelection) {
+      const data = {
+        textQuery: tripSelection?.location.label,
+      };
+
+      GetPhotoUrl(data).then((url) => {
+        setPhotoUrl(url);
+      });
+    }
+  }, [tripSelection]);
+
+  const [photoUrl, setPhotoUrl] = useState<string>();
+
   return (
     <div>
       <div className="flex flex-col gap-4">
         <img
           className="w-full h-[250px] md:h-[450px] rounded-2xl shadow-xl"
-          src={tripImg}
+          src={photoUrl}
           alt="trip-img"
         />
         <h2 className="text-2xl font-bold">{tripSelection?.location.label}</h2>
