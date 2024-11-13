@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import InfoSection from "../components/InfoSection";
 import { Trip } from "@/interfaces/Trip";
 import Hotels from "../components/Hotels";
+import Places from "../components/Places";
 
 function ViewTrip() {
   const { tripId } = useParams();
@@ -36,7 +37,8 @@ function ViewTrip() {
         <InfoSection tripSelection={trip?.tripSelection} />
 
         <Hotels hotels={trip?.tripData.travelPlan.hotels} />
-        {/* Daily plan */}
+
+        <Places itineraryData={trip?.tripData.travelPlan.itinerary} />
       </div>
     </>
   );

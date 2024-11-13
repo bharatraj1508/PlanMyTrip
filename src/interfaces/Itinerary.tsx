@@ -8,7 +8,7 @@ export interface Schedule {
   timeTravel: string;
 }
 
-export interface itinerary {
+export interface Itinerary {
   day: number;
   schedule: Schedule[];
 }

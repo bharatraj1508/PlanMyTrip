@@ -28,6 +28,7 @@ function Hotels({ hotels }: HotelProps) {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-5 mt-7">
         {hotels?.map((hotel, index) => (
           <Link
+            key={index}
             to={
               "https://www.google.com/maps/search/?api=1&query=" +
               hotel.hotelName +
@@ -36,10 +37,7 @@ function Hotels({ hotels }: HotelProps) {
             target="_blank"
             className="flex flex-row gap-2"
           >
-            <div
-              key={index}
-              className="h-full flex flex-col gap-3 hover:scale-105 transition-all duration-300"
-            >
+            <div className="h-full flex flex-col gap-3 hover:scale-105 transition-all duration-300 p-3 hover:shadow-xl rounded-3xl">
               <img
                 src={tripImg}
                 alt="hotel-img"

@@ -1,12 +1,12 @@
 import { Hotel } from "./Hotel";
-import { itinerary } from "./Itinerary";
+import { Itinerary } from "./Itinerary";
 
 export interface TripData {
   travelPlan: {
     budget: string;
     duration: number;
     hotels: Hotel[];
-    itinerary: itinerary[];
+    itinerary: Itinerary[];
     location: string;
     people: string;
   };
