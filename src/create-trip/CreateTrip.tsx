@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { Input } from "../components/ui/input";
 import {
@@ -25,6 +25,7 @@ import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "@/service/UserProvider";
 
 type Option = {
   label: string;
@@ -45,12 +46,24 @@ function CreateTrip() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("UserContext must be used within a UserProvider");
+  }
+
+  const { user, signIn } = userContext;
+
   const [formData, setFormData] = useState<FormData>({
     location: { label: "", value: "" },
     days: 0,
     budget: "",
     traveler: "",
   });
+
+  useEffect(() => {
+    if (user && loading) OnGenerateTrip();
+  }, [user]);
 
   const handleInputChange = (name: string, value: Option | string | number) => {
     setFormData({
@@ -65,16 +78,7 @@ function CreateTrip() {
   });
 
   const OnGenerateTrip = async () => {
-    setLoading(true);
-
     const { budget, location, traveler, days } = formData;
-
-    const user = localStorage.getItem("user");
-
-    if (!user) {
-      setOpenSignInDialog(true);
-      return;
-    }
 
     if (
       !budget ||
@@ -87,6 +91,12 @@ function CreateTrip() {
         title: "Error!",
         description: checkMissingFields(location, days, budget, traveler),
       });
+      return;
+    }
+
+    setLoading(true);
+    if (!user) {
+      setOpenSignInDialog(true);
       return;
     }
 
@@ -125,10 +135,8 @@ function CreateTrip() {
         }
       )
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("user", JSON.stringify(res.data));
+        signIn(res.data);
         setOpenSignInDialog(false);
-        OnGenerateTrip();
       });
   };
 
