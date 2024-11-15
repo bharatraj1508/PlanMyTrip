@@ -27,3 +27,21 @@ export const checkMissingFields = (
 
   return "";
 };
+
+export const formatDate = (timestamp: string) => {
+  const numTimestamp: number = Number(timestamp);
+
+  const date = new Date(numTimestamp);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  };
+  const formattedDate = date.toLocaleString("en-US", options);
+
+  return formattedDate;
+};

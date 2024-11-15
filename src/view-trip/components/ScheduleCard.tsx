@@ -38,8 +38,12 @@ function ScheduleCard({ place }: PlaceProp) {
             className="w-[400px] h-[200px] md:w-full md:h-[200px] object-cover rounded-2xl border border-black"
           />
           <div className="px-2 flex flex-col gap-1">
-            <h2 className="text-lg font-semibold">{place.placeName}</h2>
-            <h2 className="text-xs text-gray-500">{place.placeDetails}</h2>
+            <h2 className="text-lg font-semibold line-clamp-1">
+              {place.placeName}
+            </h2>
+            <h2 className="text-xs text-gray-500 line-clamp-3">
+              {place.placeDetails}
+            </h2>
 
             <h2 className="text-sm">⏱️ {place.timeTravel}</h2>
             <h2 className="text-sm">💲 {place.ticketPricing}</h2>

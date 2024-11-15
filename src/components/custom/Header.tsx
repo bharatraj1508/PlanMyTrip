@@ -11,9 +11,17 @@ import {
 import { UserContext } from "@/service/UserProvider";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { GrGoogle } from "react-icons/gr";
 
 function Header() {
   const userContext = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const doLogout = () => {
+    signOut();
+    navigate("/");
+  };
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => getUserProfile(codeResponse?.access_token),
@@ -33,6 +41,7 @@ function Header() {
       )
       .then((res) => {
         signIn(res.data);
+        navigate("/my-trips");
       });
   };
 
@@ -47,7 +56,7 @@ function Header() {
       <div className="p-4 px-5 shadow-sm flex justify-between items-center h-full">
         <img
           onClick={() => {
-            window.location.href = "/";
+            navigate("/");
           }}
           src={logo}
           alt="app-logo"
@@ -68,10 +77,18 @@ function Header() {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>My Trips</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <div
+                    onClick={() => {
+                      navigate("/my-trips");
+                    }}
+                  >
+                    <h2>My Trips</h2>
+                  </div>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <div onClick={signOut}>
+                  <div onClick={doLogout}>
                     <h2 className="text-red-500">Logout</h2>
                   </div>
                 </DropdownMenuItem>
@@ -83,8 +100,10 @@ function Header() {
             onClick={() => {
               login();
             }}
+            className="flex flex-row items-center"
           >
-            Sign In
+            <GrGoogle />
+            Sign In with Google
           </Button>
         )}
       </div>
