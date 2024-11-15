@@ -19,6 +19,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link } from "react-router-dom";
+import { IoMdAdd } from "react-icons/io";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import tripImg from "../assets/trip.jpg";
 
 export type AllTripsData = {
   id: string;
@@ -82,34 +93,64 @@ function MyTrip() {
       <div className="mx-10 md:mx-20 md:my-8">
         <h2 className="text-3xl font-bold my-14">My Trips</h2>
 
-        <div className="my-8">
-          <Select
-            value={viewType}
-            onValueChange={(e) => {
-              handleChange(e);
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="View" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="grid">Grid</SelectItem>
-              <SelectItem value="table">List</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {viewType == "table" ? (
+        {trips?.length !== 0 ? (
           <div>
-            <TripTable tripData={trips!} deleteTrip={deleteTrip} />
+            <div className="my-8">
+              <Select
+                value={viewType}
+                onValueChange={(e) => {
+                  handleChange(e);
+                }}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="View" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="grid">Grid</SelectItem>
+                  <SelectItem value="table">List</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {viewType == "table" ? (
+              <div>
+                <TripTable tripData={trips!} deleteTrip={deleteTrip} />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-y-8 md:grid-cols-4 md:gap-y-9 md:gap-x-5">
+                {trips?.map((item, index) => (
+                  <div key={index}>
+                    <TripCard tripData={item} deleteTrip={deleteTrip} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-y-8 md:grid-cols-4 md:gap-y-9 md:gap-x-5">
-            {trips?.map((item, index) => (
-              <div key={index}>
-                <TripCard tripData={item} />
-              </div>
-            ))}
+          <div className="flex justify-center">
+            <Card className="max-w-md bg-gray-50 shadow-lg border border-gray-300 rounded-xl">
+              <CardHeader>
+                <CardTitle>NO TRIPS</CardTitle>
+                <CardDescription>You have created no trips yet</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div>
+                  <img
+                    src={tripImg}
+                    alt="trip-img"
+                    className="rounded-3xl h-[250px]"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Link
+                  to={"/create-trip"}
+                  className="py-1.5 px-3 flex w-fit flex-row gap-1 items-center border border-gray-300 rounded-3xl shadow-sm hover:scale-110 hover:shadow-xl transition-all duration-300"
+                >
+                  <IoMdAdd /> Create Your First Trip
+                </Link>
+              </CardFooter>
+            </Card>
           </div>
         )}
       </div>

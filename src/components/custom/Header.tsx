@@ -11,8 +11,10 @@ import {
 import { UserContext } from "@/service/UserProvider";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GrGoogle } from "react-icons/gr";
+import userImg from "../../assets/user-img.jpg";
+import { IoMdAdd } from "react-icons/io";
 
 function Header() {
   const userContext = useContext(UserContext);
@@ -63,37 +65,48 @@ function Header() {
           className="cursor-pointer"
         />
         {isSignedIn ? (
-          <div className="flex flex-row items-center mr-10">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div>
-                  {user && (
-                    <img
-                      className="rounded-full h-10 w-10 hover:scale-125 hover:shadow-md transition-all duration-300"
-                      src={user.picture}
-                      alt="user-image"
-                    />
-                  )}
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <div
-                    onClick={() => {
-                      navigate("/my-trips");
-                    }}
-                  >
-                    <h2>My Trips</h2>
+          <div className="flex flex-row items-center gap-10 md:mr-7 mr-2">
+            <div>
+              <Link
+                to={"/create-trip"}
+                className="py-1.5 px-3 flex flex-row gap-1 items-center border border-gray-300 rounded-3xl shadow-sm hover:scale-110 hover:shadow-xl transition-all duration-300"
+              >
+                <IoMdAdd /> Create Trip
+              </Link>
+            </div>
+
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <div>
+                    {user && (
+                      <img
+                        className="rounded-full h-10 w-10 hover:scale-125 hover:shadow-md transition-all duration-300"
+                        src={user.picture ? user.picture : userImg}
+                        alt="user-image"
+                      />
+                    )}
                   </div>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <div onClick={doLogout}>
-                    <h2 className="text-red-500">Logout</h2>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <div
+                      onClick={() => {
+                        navigate("/my-trips");
+                      }}
+                    >
+                      <h2>My Trips</h2>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    <div onClick={doLogout}>
+                      <h2 className="text-red-500">Logout</h2>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         ) : (
           <Button

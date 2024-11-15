@@ -19,7 +19,7 @@ export const GetPhotoUrl = async (data: any): Promise<string> => {
 
   try {
     const res = await GetPlaceDetails(data);
-    console.log(res);
+
     url = `https://places.googleapis.com/v1/${
       res.data.places[0].photos[5].name
     }/media?maxHeightPx=1000&maxWidthPx=1000&key=${

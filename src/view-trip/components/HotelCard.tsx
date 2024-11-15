@@ -2,6 +2,7 @@ import { Hotel } from "@/interfaces/Hotel";
 import { GetPhotoUrl } from "@/service/PhotosAPI";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import tripImg from "../../assets/trip.jpg";
 
 type HotelCardProp = {
   hotel: Hotel;
@@ -35,7 +36,7 @@ function HotelCard({ hotel }: HotelCardProp) {
       >
         <div className="h-full flex flex-col gap-3 hover:scale-105 transition-all duration-300 p-3 hover:shadow-xl rounded-3xl">
           <img
-            src={photoUrl}
+            src={photoUrl ? photoUrl : tripImg}
             alt="hotel-img"
             className="w-[300px] h-[350px] md:w-[300px] md:h-[250px] object-cover rounded-2xl border border-black"
           />
