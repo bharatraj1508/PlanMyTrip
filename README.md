@@ -63,12 +63,11 @@ A web app designed to simplify trip planning by leveraging the power of Google A
 ## 💻 Installation & Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/bharatraj1508/PlanMyTrip.git
    cd your-repo-name
    ```
-
-````
 
 2. Install dependencies:
 
@@ -99,4 +98,3 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 [PlanMyTrip](https://planmytrip-demo.netlify.app/)
 
 Happy traveling! 🧳✈️
-````
