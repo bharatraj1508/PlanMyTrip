@@ -10,13 +10,6 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { checkMissingFields } from "@/utils/function";
 import { chatSession } from "@/service/AIModal";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import logo from "../../public/logo.svg";
 import { GrGoogle } from "react-icons/gr";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -26,6 +19,14 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "@/service/UserProvider";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Option = {
   label: string;
@@ -94,11 +95,11 @@ function CreateTrip() {
       return;
     }
 
-    setLoading(true);
     if (!user) {
       setOpenSignInDialog(true);
       return;
     }
+    setLoading(true);
 
     const FINAL_PROMPT = AI_PROMPT(location.label, days, budget, traveler);
 
@@ -226,7 +227,11 @@ function CreateTrip() {
           </div>
 
           <div className="my-10 flex justify-end">
-            <Button disabled={loading} onClick={OnGenerateTrip}>
+            <Button
+              disabled={loading}
+              onClick={OnGenerateTrip}
+              className="rounded-lg bg-gray-800 text-white font-bold transition duration-300 hover:bg-white hover:text-black border-2 border-transparent hover:border-gray-800"
+            >
               {loading ? (
                 <AiOutlineLoading3Quarters className="w-7 h-7 animate-spin" />
               ) : (
@@ -235,26 +240,52 @@ function CreateTrip() {
             </Button>
           </div>
 
-          <Dialog open={openSignInDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="flex gap-5 items-center">
+          <AlertDialog open={loading}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Please wait while we prepare your travel plan...
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Our Generative AI model is preparing the details for your
+                  adventure. Based on your {formData.budget} budget for{" "}
+                  {formData.days} days in {formData.location.label}
+                </AlertDialogDescription>
+                <AlertDialogDescription className="flex items-center justify-center">
+                  <AiOutlineLoading3Quarters className="w-10 h-10 animate-spin my-4 font-bold" />
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog open={openSignInDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex gap-5 items-center">
                   <img className="h-10 w-10" src={logo} alt="app-logo" />
                   Sign In with Google
-                </DialogTitle>
-                <DialogDescription>
+                </AlertDialogTitle>
+                <AlertDialogDescription>
                   Please sing in to the app using your google account.
-                  <Button
-                    onClick={() => login()}
-                    className=" w-full mt-5 bg-blue-600 hover:bg-blue-800 rounded-lg flex items-center gap-4"
-                  >
-                    <GrGoogle />
-                    Sign in with google
-                  </Button>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <Button
+                  onClick={() => login()}
+                  className="flex flex-row items-center mt-6 rounded-lg bg-blue-600 text-white font-bold transition duration-300 hover:bg-white hover:text-black border-2 border-transparent hover:border-blue-600"
+                >
+                  <GrGoogle />
+                  Sign in with google
+                </Button>
+                <Button
+                  onClick={() => setOpenSignInDialog(false)}
+                  className="flex flex-row items-center mt-6 rounded-lg bg-gray-800 text-white font-bold transition duration-300 hover:bg-white hover:text-black border-2 border-transparent hover:border-gray-800"
+                >
+                  Cancel
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </>

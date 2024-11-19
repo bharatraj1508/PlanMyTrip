@@ -41,6 +41,7 @@ function ViewTrip() {
 
     if (docSnap.exists()) {
       setTrip(docSnap.data() as Trip);
+      console.log(docSnap.data());
     } else {
       toast({
         title: "OOPS!",

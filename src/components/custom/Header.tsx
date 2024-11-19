@@ -113,7 +113,7 @@ function Header() {
             onClick={() => {
               login();
             }}
-            className="flex flex-row items-center"
+            className="flex flex-row items-center rounded-lg bg-gray-800 text-white font-bold transition duration-300 hover:bg-white hover:text-black border-2 border-transparent hover:border-gray-800"
           >
             <GrGoogle />
             Sign In with Google
