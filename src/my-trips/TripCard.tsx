@@ -35,7 +35,7 @@ function TripCard({ tripData, deleteTrip }: TripCardProp) {
           alt="trip-img"
         />
         <div className="mx-2 mt-1">
-          <h2 className="text-lg font-semibold">
+          <h2 className="text-lg font-semibold line-clamp-1">
             {tripData?.trips.tripSelection.location.label}
           </h2>
 
